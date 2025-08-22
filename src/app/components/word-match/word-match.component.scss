@@ -1,0 +1,27 @@
+/* filepath: src/app/word-match/word-match.component.scss */
+.columns {
+  display: flex;
+  gap: 40px;
+}
+.column {
+  flex: 1;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  padding: 10px;
+  margin: 5px 0;
+  background: #eee;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+li.selected {
+  background: #cce5ff;
+}
+li.matched {
+  background: #b6fcb6;
+  pointer-events: none;
+}
