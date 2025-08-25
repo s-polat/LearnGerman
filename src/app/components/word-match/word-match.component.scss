@@ -25,3 +25,45 @@ li.matched {
   background: #b6fcb6;
   pointer-events: none;
 }
+
+.list-group-item {
+  border: 2px solid transparent;
+  box-sizing: border-box;
+}
+
+.list-group-item.matched {
+  border: 2px solid #39ff14;
+  background: #aaffc3;
+  color: #158f3b;
+  position: relative;
+  z-index: 1;
+  animation: neon-spin-y 1s cubic-bezier(.05,2,1,1.0);
+  transform-style: preserve-3d;
+}
+
+ul.list-group > li.list-group-item.bg-danger {
+  border: 2px solid #ffb3b3 !important;
+  background: #ffd6d6 !important;
+  color: #a94442 !important;
+}
+
+@keyframes neon-spin-y {
+  0% {
+    transform: rotateY(0deg) scale(1);
+    box-shadow: 0 0 0 #39ff14;
+  }
+  50% {
+    transform: rotateY(0deg) scale(1);
+    box-shadow: 0 0 6px #39ff14, 0 0 24px #39ff1455;
+  }
+  100% {
+    transform: rotateY(360deg) scale(1);
+    box-shadow: none;
+  }
+}
+
+ul.list-group > li.list-group-item.bg-danger {
+  background: #ffd6d6 !important; // Soluk kırmızı
+  color: #a94442 !important;
+  border: 2px solid #ffb3b3 !important;
+}
