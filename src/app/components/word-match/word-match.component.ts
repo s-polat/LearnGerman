@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import confetti from 'canvas-confetti';
 
 
 interface WordPair {
@@ -41,31 +42,66 @@ export class WordMatchComponent {
 
   germanWords: string[];
   turkishWords: string[]; 
+  selectedSide: 'german' | 'turkish' | null = null;
+  showCongrats: boolean = false;
 
   selectedGerman: string | null = null;
   selectedTurkish: string | null = null;
 
-   selectGerman(word: string) {
-    if (this.selectedGerman || this.wordPairs.find(w => w.german === word)?.matched) return;
-    this.selectedGerman = word;
+  get matchedCount(): number {
+  return this.wordPairs.filter(w => w.matched).length;
+}
+
+get progress(): number {
+  return Math.round((this.matchedCount / this.wordPairs.length) * 100);
+}
+
+  selectGerman(word: string) {
+    if (this.isMatchedGerman(word)) return;
+    if (!this.selectedSide) {
+      this.selectedGerman = word;
+      this.selectedSide = 'german';
+      return;
+    }
+    if (this.selectedSide === 'turkish' && this.selectedTurkish) {
+      this.selectedGerman = word;
+      this.checkMatch();
+    }
   }
 
   selectTurkish(word: string) {
-    if (!this.selectedGerman || this.wordPairs.find(w => w.turkish === word)?.matched) return;
-    this.selectedTurkish = word;
-    this.checkMatch();
-  }
-
-  checkMatch() {
-    const pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
-    if (pair) {
-      pair.matched = true;
+    if (this.isMatchedTurkish(word)) return;
+    if (!this.selectedSide) {
+      this.selectedTurkish = word;
+      this.selectedSide = 'turkish';
+      return;
     }
-    this.selectedGerman = null;
-    this.selectedTurkish = null;
+    if (this.selectedSide === 'german' && this.selectedGerman) {
+      this.selectedTurkish = word;
+      this.checkMatch();
+    }
   }
 
-  isMatchedGerman(word: string): boolean {
+  launchConfetti() {
+  confetti();
+}
+
+checkMatch() {
+  const pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
+  if (pair) {
+    pair.matched = true;
+  }
+  this.selectedGerman = null;
+  this.selectedTurkish = null;
+  this.selectedSide = null;
+
+  if (this.matchedCount === this.wordPairs.length) {
+    this.showCongrats = true;
+    this.launchConfetti();
+  }
+}
+
+   isMatchedGerman(word: string): boolean {
     return this.wordPairs.find(w => w.german === word)?.matched ?? false;
   }
 

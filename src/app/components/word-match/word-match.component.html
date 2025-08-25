@@ -1,26 +1,44 @@
-<div class="row">
-  <div class="col">
-    <h3>Almanca</h3>
-    <ul class="list-group">
-      <li *ngFor="let german of germanWords"
-          class="list-group-item"
-          [class.matched]="isMatchedGerman(german)"
-          [class.selected]="selectedGerman === german"
-          (click)="selectGerman(german)">
-        {{ german }}
-      </li>
-    </ul>
-  </div>
-  <div class="col">
-    <h3>Türkçe</h3>
-    <ul class="list-group">
-      <li *ngFor="let turkish of turkishWords"
-          class="list-group-item"
-          [class.matched]="isMatchedTurkish(turkish)"
-          [class.selected]="selectedTurkish === turkish"
-          (click)="selectTurkish(turkish)">
-        {{ turkish }}
-      </li>
-    </ul>
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="bg-white p-4 rounded shadow" style="max-width: 600px; width: 100%;">
+   
+    <div class="row">
+      <div class="col">
+        <h3 class="text-center">Almanca</h3>
+        <ul class="list-group">
+          <li *ngFor="let german of germanWords"
+              class="list-group-item"
+              [class.matched]="isMatchedGerman(german)"
+              [class.selected]="selectedGerman === german"
+              (click)="selectGerman(german)">
+            {{ german }}
+          </li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3 class="text-center">Türkçe</h3>
+        <ul class="list-group">
+          <li *ngFor="let turkish of turkishWords"
+              class="list-group-item"
+              [class.matched]="isMatchedTurkish(turkish)"
+              [class.selected]="selectedTurkish === turkish"
+              (click)="selectTurkish(turkish)">
+            {{ turkish }}
+          </li>
+        </ul>
+      </div>
+    </div>
+     <!-- Progress Bar -->
+    <div class="d-flex justify-content-center mt-4">
+      <div class="progress" style="height: 24px; width: 400px;" >
+        <div class="progress-bar" role="progressbar" [style.width.%]="progress" [attr.aria-valuenow]="progress"
+          aria-valuemin="0" aria-valuemax="100">
+          {{ progress }}%
+        </div>
+      </div>
+    </div>
+    <!-- Tebrik Mesajı -->
+    <div *ngIf="showCongrats" class="m-auto text-center mb-4">
+      <h4 class="text-success">Tebrikler! Hepsini doğru eşleştirdiniz 🎉</h4>
+    </div>
   </div>
 </div>
