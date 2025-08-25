@@ -39,7 +39,8 @@ export class WordMatchComponent {
     this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
   }
 
-
+wrongMatchGerman: string | null = null;
+wrongMatchTurkish: string | null = null;
   germanWords: string[];
   turkishWords: string[]; 
   selectedSide: 'german' | 'turkish' | null = null;
@@ -90,14 +91,24 @@ checkMatch() {
   const pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
   if (pair) {
     pair.matched = true;
-  }
-  this.selectedGerman = null;
-  this.selectedTurkish = null;
-  this.selectedSide = null;
-
-  if (this.matchedCount === this.wordPairs.length) {
-    this.showCongrats = true;
-    this.launchConfetti();
+    this.selectedGerman = null;
+    this.selectedTurkish = null;
+    this.selectedSide = null;
+    if (this.matchedCount === this.wordPairs.length) {
+      this.showCongrats = true;
+      this.launchConfetti();
+    }
+  } else {
+    // Yanlış eşleşme
+    this.wrongMatchGerman = this.selectedGerman;
+    this.wrongMatchTurkish = this.selectedTurkish;
+    setTimeout(() => {
+      this.wrongMatchGerman = null;
+      this.wrongMatchTurkish = null;
+      this.selectedGerman = null;
+      this.selectedTurkish = null;
+      this.selectedSide = null;
+    }, 700); // 700ms kırmızı göster
   }
 }
 

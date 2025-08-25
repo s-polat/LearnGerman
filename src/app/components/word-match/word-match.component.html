@@ -5,25 +5,27 @@
       <div class="col">
         <h3 class="text-center">Almanca</h3>
         <ul class="list-group">
-          <li *ngFor="let german of germanWords"
-              class="list-group-item"
-              [class.matched]="isMatchedGerman(german)"
-              [class.selected]="selectedGerman === german"
-              (click)="selectGerman(german)">
-            {{ german }}
-          </li>
+         <li *ngFor="let german of germanWords"
+    class="list-group-item"
+    [class.matched]="isMatchedGerman(german)"
+    [class.selected]="selectedGerman === german"
+    [class.bg-danger]="wrongMatchGerman === german"
+    (click)="selectGerman(german)">
+  {{ german }}
+</li>
         </ul>
       </div>
       <div class="col">
         <h3 class="text-center">Türkçe</h3>
         <ul class="list-group">
           <li *ngFor="let turkish of turkishWords"
-              class="list-group-item"
-              [class.matched]="isMatchedTurkish(turkish)"
-              [class.selected]="selectedTurkish === turkish"
-              (click)="selectTurkish(turkish)">
-            {{ turkish }}
-          </li>
+    class="list-group-item"
+    [class.matched]="isMatchedTurkish(turkish)"
+    [class.selected]="selectedTurkish === turkish"
+    [class.bg-danger]="wrongMatchTurkish === turkish"
+    (click)="selectTurkish(turkish)">
+  {{ turkish }}
+</li>
         </ul>
       </div>
     </div>
