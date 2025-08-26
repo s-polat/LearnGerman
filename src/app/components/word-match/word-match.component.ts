@@ -14,6 +14,8 @@ function shuffle<T>(array: T[]): T[] {
     .map(({ value }) => value);
 }
 
+type LanguageMode = 'german-turkish' | 'german-english' | 'english-turkish';
+
 @Component({
   selector: 'app-word-match',
   templateUrl: './word-match.component.html',
@@ -30,16 +32,20 @@ export class WordMatchComponent {
 
  selectedLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' = 'A1';
  selectedType: 'noun' | 'verb' | 'adverb' | 'adjektiv' = 'noun';
+   selectedLanguageMode: LanguageMode = 'german-turkish';
   allPairs: WordPair[] = [];
   wordPairs: WordPair[] = [];
   germanWords: string[] = [];
   turkishWords: string[] = [];
+  englishWords: string[] = [];
   wrongMatchGerman: string | null = null;
   wrongMatchTurkish: string | null = null;
-  selectedSide: 'german' | 'turkish' | null = null;
+  wrongMatchEnglish: string | null = null;
+    selectedSide: 'german' | 'turkish' | 'english' | null = null;
   showCongrats: boolean = false;
   selectedGerman: string | null = null;
   selectedTurkish: string | null = null;
+  selectedEnglish: string | null = null;
 
  loadPairs() {
   if (this.selectedType === 'noun') {
@@ -80,18 +86,84 @@ export class WordMatchComponent {
   pickNewWords() {
     const shuffled = shuffle(this.allPairs.filter(w => !w.matched));
     this.wordPairs = shuffled.slice(0, 7);
-    this.germanWords = shuffle(this.wordPairs.map(w => w.german));
-    this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+
+    if (this.selectedLanguageMode === 'german-turkish') {
+      this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+      this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+    } else if (this.selectedLanguageMode === 'german-english') {
+      this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+      this.englishWords = shuffle(this.wordPairs.map(w => w.english));
+    } else if (this.selectedLanguageMode === 'english-turkish') {
+      this.englishWords = shuffle(this.wordPairs.map(w => w.english));
+      this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+    }
+
     this.selectedGerman = null;
     this.selectedTurkish = null;
+    this.selectedEnglish = null;
     this.selectedSide = null;
     this.showCongrats = false;
+  }
+
+    onLanguageModeChange() {
+    this.pickNewWords();
   }
 
    onTypeChange() {
     this.loadPairs();
     this.allPairs.forEach(w => w.matched = false);
     this.pickNewWords();
+  }
+
+    selectGerman(word: string) {
+    if (this.isMatchedGerman(word)) return;
+    if (!this.selectedSide) {
+      this.selectedGerman = word;
+      this.selectedSide = 'german';
+      return;
+    }
+    if (this.selectedLanguageMode === 'german-turkish' && this.selectedSide === 'turkish' && this.selectedTurkish) {
+      this.selectedGerman = word;
+      this.checkMatch();
+    }
+    if (this.selectedLanguageMode === 'german-english' && this.selectedSide === 'english' && this.selectedEnglish) {
+      this.selectedGerman = word;
+      this.checkMatch();
+    }
+  }
+
+  selectTurkish(word: string) {
+    if (this.isMatchedTurkish(word)) return;
+    if (!this.selectedSide) {
+      this.selectedTurkish = word;
+      this.selectedSide = 'turkish';
+      return;
+    }
+    if (this.selectedLanguageMode === 'german-turkish' && this.selectedSide === 'german' && this.selectedGerman) {
+      this.selectedTurkish = word;
+      this.checkMatch();
+    }
+    if (this.selectedLanguageMode === 'english-turkish' && this.selectedSide === 'english' && this.selectedEnglish) {
+      this.selectedTurkish = word;
+      this.checkMatch();
+    }
+  }
+
+  selectEnglish(word: string) {
+    if (this.isMatchedEnglish(word)) return;
+    if (!this.selectedSide) {
+      this.selectedEnglish = word;
+      this.selectedSide = 'english';
+      return;
+    }
+    if (this.selectedLanguageMode === 'german-english' && this.selectedSide === 'german' && this.selectedGerman) {
+      this.selectedEnglish = word;
+      this.checkMatch();
+    }
+    if (this.selectedLanguageMode === 'english-turkish' && this.selectedSide === 'turkish' && this.selectedTurkish) {
+      this.selectedEnglish = word;
+      this.checkMatch();
+    }
   }
 
    onLevelChange() {
@@ -108,38 +180,22 @@ get progress(): number {
   return Math.round((this.matchedCount / this.wordPairs.length) * 100);
 }
 
-  selectGerman(word: string) {
-    if (this.isMatchedGerman(word)) return;
-    if (!this.selectedSide) {
-      this.selectedGerman = word;
-      this.selectedSide = 'german';
-      return;
-    }
-    if (this.selectedSide === 'turkish' && this.selectedTurkish) {
-      this.selectedGerman = word;
-      this.checkMatch();
-    }
-  }
-
-  selectTurkish(word: string) {
-    if (this.isMatchedTurkish(word)) return;
-    if (!this.selectedSide) {
-      this.selectedTurkish = word;
-      this.selectedSide = 'turkish';
-      return;
-    }
-    if (this.selectedSide === 'german' && this.selectedGerman) {
-      this.selectedTurkish = word;
-      this.checkMatch();
-    }
-  }
+ 
 
   launchConfetti() {
   confetti();
 }
 
 checkMatch() {
-    const pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
+    let pair: WordPair | undefined;
+    if (this.selectedLanguageMode === 'german-turkish') {
+      pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
+    } else if (this.selectedLanguageMode === 'german-english') {
+      pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.english === this.selectedEnglish);
+    } else if (this.selectedLanguageMode === 'english-turkish') {
+      pair = this.wordPairs.find(w => w.english === this.selectedEnglish && w.turkish === this.selectedTurkish);
+    }
+
     if (pair) {
       pair.matched = true;
       if (this.matchedCount === this.wordPairs.length) {
@@ -147,19 +203,23 @@ checkMatch() {
         this.launchConfetti();
         setTimeout(() => {
           this.pickNewWords();
-        }, 1500); // 1.5 saniye sonra yeni kelimeler gelsin
+        }, 1500);
       }
       this.selectedGerman = null;
       this.selectedTurkish = null;
+      this.selectedEnglish = null;
       this.selectedSide = null;
     } else {
       this.wrongMatchGerman = this.selectedGerman;
       this.wrongMatchTurkish = this.selectedTurkish;
+      this.wrongMatchEnglish = this.selectedEnglish;
       setTimeout(() => {
         this.wrongMatchGerman = null;
         this.wrongMatchTurkish = null;
+        this.wrongMatchEnglish = null;
         this.selectedGerman = null;
         this.selectedTurkish = null;
+        this.selectedEnglish = null;
         this.selectedSide = null;
       }, 700);
     }
@@ -170,12 +230,14 @@ checkMatch() {
   return pair ? pair.artikel : '';
 }
 
-   isMatchedGerman(word: string): boolean {
+ isMatchedGerman(word: string): boolean {
     return this.wordPairs.find(w => w.german === word)?.matched ?? false;
   }
-
   isMatchedTurkish(word: string): boolean {
     return this.wordPairs.find(w => w.turkish === word)?.matched ?? false;
+  }
+  isMatchedEnglish(word: string): boolean {
+    return this.wordPairs.find(w => w.english === word)?.matched ?? false;
   }
 
 }
