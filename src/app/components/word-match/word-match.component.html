@@ -3,23 +3,29 @@
     <!-- Seviye seçimi üstte, ortalanmış ve şık -->
    <div class="mb-4 d-flex justify-content-center align-items-center gap-3">
   <div>
-    <label for="levelSelect" class="form-label me-2 mb-0 fw-bold">Niveau:</label>
-    <select id="levelSelect" class="form-select w-auto" [(ngModel)]="selectedLevel" (change)="onLevelChange()">
-      <option value="A1">A1</option>
-      <option value="A2">A2</option>
-      <option value="B1">B1</option>
-      <option value="B2">B2</option>
-      <option value="C1">C1</option>
-    </select>
+     <label for="levelSelect" class="form-label me-2 mb-0 fw-bold">Niveau:</label>
+    <div class="custom-select-wrapper">
+      <select id="levelSelect" class="form-select custom-select" [(ngModel)]="selectedLevel" (change)="onLevelChange()">
+        <option value="A1">A1</option>
+        <option value="A2">A2</option>
+        <option value="B1">B1</option>
+        <option value="B2">B2</option>
+        <option value="C1">C1</option>
+      </select>
+      <span class="custom-arrow"></span>
+    </div>
   </div>
   <div>
     <label for="typeSelect" class="form-label me-2 mb-0 fw-bold">Tür:</label>
-    <select id="typeSelect" class="form-select w-auto" [(ngModel)]="selectedType" (change)="onTypeChange()">
-      <option value="noun">İsimler</option>
-      <option value="verb">Fiiller</option>
-      <option value="adjective">Sıfatlar</option>
-      <option value="adverb">Zarflar</option>
-    </select>
+    <div class="custom-select-wrapper">
+      <select id="typeSelect" class="form-select custom-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
+        <option value="noun">İsimler</option>
+        <option value="verb">Fiiller</option>
+        <option value="adjective">Sıfatlar</option>
+        <option value="adverb">Zarflar</option>
+      </select>
+      <span class="custom-arrow"></span>
+    </div>
   </div>
 </div>
     <div class="row">

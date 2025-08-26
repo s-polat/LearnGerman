@@ -81,3 +81,34 @@ ul.list-group > li.list-group-item.bg-danger {
   color: #a94442 !important;
   border: 2px solid #ffb3b3 !important;
 }
+
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 140px;
+}
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  padding: 8px 36px 8px 12px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.custom-select:focus {
+  border-color: #0d6efd;
+  outline: none;
+}
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: url('data:image/svg+xml;utf8,<svg fill="none" stroke="gray" stroke-width="2" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6"/></svg>') no-repeat center;
+}
