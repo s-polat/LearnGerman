@@ -17,6 +17,8 @@
     <select id="typeSelect" class="form-select w-auto" [(ngModel)]="selectedType" (change)="onTypeChange()">
       <option value="noun">İsimler</option>
       <option value="verb">Fiiller</option>
+      <option value="adjective">Sıfatlar</option>
+      <option value="adverb">Zarflar</option>
     </select>
   </div>
 </div>
@@ -52,7 +54,7 @@
       </div>
     </div>
     <!-- Progress Bar -->
-    <div class="d-flex justify-content-center mt-4">
+    <div *ngIf="!showCongrats" class="d-flex justify-content-center mt-4">
       <div class="progress" style="height: 24px; width: 400px;" >
         <div class="progress-bar" role="progressbar" [style.width.%]="progress" [attr.aria-valuenow]="progress"
           aria-valuemin="0" aria-valuemax="100">
@@ -61,7 +63,7 @@
       </div>
     </div>
     <!-- Tebrik Mesajı -->
-    <div *ngIf="showCongrats" class="m-auto text-center mb-4">
+    <div *ngIf="showCongrats" class="m-auto text-center mt-4">
       <h4 class="text-success">Tebrikler! Hepsini doğru eşleştirdiniz 🎉</h4>
     </div>
   </div>

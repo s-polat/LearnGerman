@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import confetti from 'canvas-confetti';
-import { VERB_PAIRS_A1, VERB_PAIRS_A2, VERB_PAIRS_B1, VERB_PAIRS_B2, VERB_PAIRS_C1, WORD_PAIRS_A1, WORD_PAIRS_A2, WORD_PAIRS_B1, WORD_PAIRS_B2, WORD_PAIRS_C1, WordPair } from '../../data/word-pairs';
+import { ADJEKTIV_PAIRS_A1, ADJEKTIV_PAIRS_A2, ADJEKTIV_PAIRS_B1, ADJEKTIV_PAIRS_B2, ADJEKTIV_PAIRS_C1, ADVERB_PAIRS_A1, ADVERB_PAIRS_A2, ADVERB_PAIRS_B1, ADVERB_PAIRS_B2, ADVERB_PAIRS_C1, VERB_PAIRS_A1, VERB_PAIRS_A2, VERB_PAIRS_B1, VERB_PAIRS_B2, VERB_PAIRS_C1, WORD_PAIRS_A1, WORD_PAIRS_A2, WORD_PAIRS_B1, WORD_PAIRS_B2, WORD_PAIRS_C1, WordPair } from '../../data/word-pairs';
 import { FormsModule } from '@angular/forms';
 
 
@@ -29,7 +29,7 @@ export class WordMatchComponent {
   }
 
  selectedLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' = 'A1';
-  selectedType: 'noun' | 'verb' = 'noun';
+ selectedType: 'noun' | 'verb' | 'adverb' | 'adjektiv' = 'noun';
   allPairs: WordPair[] = [];
   wordPairs: WordPair[] = [];
   germanWords: string[] = [];
@@ -41,26 +41,41 @@ export class WordMatchComponent {
   selectedGerman: string | null = null;
   selectedTurkish: string | null = null;
 
-  loadPairs() {
-    if (this.selectedType === 'noun') {
-      switch (this.selectedLevel) {
-        case 'A1': this.allPairs = [...WORD_PAIRS_A1]; break;
-        case 'A2': this.allPairs = [...WORD_PAIRS_A2]; break;
-        case 'B1': this.allPairs = [...WORD_PAIRS_B1]; break;
-        case 'B2': this.allPairs = [...WORD_PAIRS_B2]; break;
-        case 'C1': this.allPairs = [...WORD_PAIRS_C1]; break;
-      }
-    } else if (this.selectedType === 'verb') {
-      switch (this.selectedLevel) {
-        case 'A1': this.allPairs = [...VERB_PAIRS_A1]; break;
-        case 'A2': this.allPairs = [...VERB_PAIRS_A2]; break;
-        case 'B1': this.allPairs = [...VERB_PAIRS_B1]; break;
-        case 'B2': this.allPairs = [...VERB_PAIRS_B2]; break;
-        case 'C1': this.allPairs = [...VERB_PAIRS_C1]; break;
-
-      }
+ loadPairs() {
+  if (this.selectedType === 'noun') {
+    switch (this.selectedLevel) {
+      case 'A1': this.allPairs = [...WORD_PAIRS_A1]; break;
+      case 'A2': this.allPairs = [...WORD_PAIRS_A2]; break;
+      case 'B1': this.allPairs = [...WORD_PAIRS_B1]; break;
+      case 'B2': this.allPairs = [...WORD_PAIRS_B2]; break;
+      case 'C1': this.allPairs = [...WORD_PAIRS_C1]; break;
+    }
+  } else if (this.selectedType === 'verb') {
+    switch (this.selectedLevel) {
+      case 'A1': this.allPairs = [...VERB_PAIRS_A1]; break;
+      case 'A2': this.allPairs = [...VERB_PAIRS_A2]; break;
+      case 'B1': this.allPairs = [...VERB_PAIRS_B1]; break;
+      case 'B2': this.allPairs = [...VERB_PAIRS_B2]; break;
+      case 'C1': this.allPairs = [...VERB_PAIRS_C1]; break;
+    }
+  } else if (this.selectedType === 'adverb') {
+    switch (this.selectedLevel) {
+      case 'A1': this.allPairs = [...ADVERB_PAIRS_A1]; break;
+      case 'A2': this.allPairs = [...ADVERB_PAIRS_A2]; break;
+      case 'B1': this.allPairs = [...ADVERB_PAIRS_B1]; break;
+      case 'B2': this.allPairs = [...ADVERB_PAIRS_B2]; break;
+      case 'C1': this.allPairs = [...ADVERB_PAIRS_C1]; break;
+    }
+  } else if (this.selectedType === 'adjektiv') {
+    switch (this.selectedLevel) {
+      case 'A1': this.allPairs = [...ADJEKTIV_PAIRS_A1]; break;
+      case 'A2': this.allPairs = [...ADJEKTIV_PAIRS_A2]; break;
+      case 'B1': this.allPairs = [...ADJEKTIV_PAIRS_B1]; break;
+      case 'B2': this.allPairs = [...ADJEKTIV_PAIRS_B2]; break;
+      case 'C1': this.allPairs = [...ADJEKTIV_PAIRS_C1]; break;
     }
   }
+}
 
   pickNewWords() {
     const shuffled = shuffle(this.allPairs.filter(w => !w.matched));
