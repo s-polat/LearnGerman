@@ -1,35 +1,57 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
   <div class="bg-white p-4 rounded shadow" style="max-width: 600px; width: 100%;">
-   
+    <!-- Seviye seçimi üstte, ortalanmış ve şık -->
+   <div class="mb-4 d-flex justify-content-center align-items-center gap-3">
+  <div>
+    <label for="levelSelect" class="form-label me-2 mb-0 fw-bold">Niveau:</label>
+    <select id="levelSelect" class="form-select w-auto" [(ngModel)]="selectedLevel" (change)="onLevelChange()">
+      <option value="A1">A1</option>
+      <option value="A2">A2</option>
+      <option value="B1">B1</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+    </select>
+  </div>
+  <div>
+    <label for="typeSelect" class="form-label me-2 mb-0 fw-bold">Tür:</label>
+    <select id="typeSelect" class="form-select w-auto" [(ngModel)]="selectedType" (change)="onTypeChange()">
+      <option value="noun">İsimler</option>
+      <option value="verb">Fiiller</option>
+    </select>
+  </div>
+</div>
     <div class="row">
       <div class="col">
         <h3 class="text-center">Almanca</h3>
         <ul class="list-group">
-         <li *ngFor="let german of germanWords"
-    class="list-group-item"
-    [class.matched]="isMatchedGerman(german)"
-    [class.selected]="selectedGerman === german"
-    [class.bg-danger]="wrongMatchGerman === german"
-    (click)="selectGerman(german)">
-  {{ german }}
-</li>
-        </ul>
+  <li *ngFor="let german of germanWords"
+      class="list-group-item"
+      [class.matched]="isMatchedGerman(german)"
+      [class.selected]="selectedGerman === german"
+      [class.bg-danger]="wrongMatchGerman === german"
+      (click)="selectGerman(german)">
+    <span class="fw-bold me-1">
+      {{ getArtikel(german) }}
+    </span>
+    {{ german }}
+  </li>
+</ul>
       </div>
       <div class="col">
         <h3 class="text-center">Türkçe</h3>
         <ul class="list-group">
           <li *ngFor="let turkish of turkishWords"
-    class="list-group-item"
-    [class.matched]="isMatchedTurkish(turkish)"
-    [class.selected]="selectedTurkish === turkish"
-    [class.bg-danger]="wrongMatchTurkish === turkish"
-    (click)="selectTurkish(turkish)">
-  {{ turkish }}
-</li>
+              class="list-group-item"
+              [class.matched]="isMatchedTurkish(turkish)"
+              [class.selected]="selectedTurkish === turkish"
+              [class.bg-danger]="wrongMatchTurkish === turkish"
+              (click)="selectTurkish(turkish)">
+            {{ turkish }}
+          </li>
         </ul>
       </div>
     </div>
-     <!-- Progress Bar -->
+    <!-- Progress Bar -->
     <div class="d-flex justify-content-center mt-4">
       <div class="progress" style="height: 24px; width: 400px;" >
         <div class="progress-bar" role="progressbar" [style.width.%]="progress" [attr.aria-valuenow]="progress"

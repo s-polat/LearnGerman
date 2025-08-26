@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import confetti from 'canvas-confetti';
+import { VERB_PAIRS_A1, VERB_PAIRS_A2, VERB_PAIRS_B1, VERB_PAIRS_B2, VERB_PAIRS_C1, WORD_PAIRS_A1, WORD_PAIRS_A2, WORD_PAIRS_B1, WORD_PAIRS_B2, WORD_PAIRS_C1, WordPair } from '../../data/word-pairs';
+import { FormsModule } from '@angular/forms';
 
 
-interface WordPair {
-  german: string;
-  turkish: string;
-  matched: boolean;
-}
+
 
 function shuffle<T>(array: T[]): T[] {
   return array
@@ -20,34 +18,72 @@ function shuffle<T>(array: T[]): T[] {
   selector: 'app-word-match',
   templateUrl: './word-match.component.html',
   styleUrl: './word-match.component.scss',
-  imports: [CommonModule]
+  imports: [CommonModule, FormsModule],
 })
 export class WordMatchComponent {
 
-  wordPairs: WordPair[] = [
-    { german: 'Haus', turkish: 'Ev', matched: false },
-    { german: 'Baum', turkish: 'Ağaç', matched: false },
-    { german: 'Buch', turkish: 'Kitap', matched: false },
-    { german: 'Auto', turkish: 'Araba', matched: false },
-    { german: 'Hund', turkish: 'Köpek', matched: false },
-    { german: 'Katze', turkish: 'Kedi', matched: false },
-    { german: 'Stuhl', turkish: 'Sandalye', matched: false }
-  ];
 
    constructor() {
-    this.germanWords = shuffle(this.wordPairs.map(w => w.german));
-    this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+    this.loadPairs();
+    this.pickNewWords();
   }
 
-wrongMatchGerman: string | null = null;
-wrongMatchTurkish: string | null = null;
-  germanWords: string[];
-  turkishWords: string[]; 
+ selectedLevel: 'A1' | 'A2' | 'B1' | 'B2' | 'C1' = 'A1';
+  selectedType: 'noun' | 'verb' = 'noun';
+  allPairs: WordPair[] = [];
+  wordPairs: WordPair[] = [];
+  germanWords: string[] = [];
+  turkishWords: string[] = [];
+  wrongMatchGerman: string | null = null;
+  wrongMatchTurkish: string | null = null;
   selectedSide: 'german' | 'turkish' | null = null;
   showCongrats: boolean = false;
-
   selectedGerman: string | null = null;
   selectedTurkish: string | null = null;
+
+  loadPairs() {
+    if (this.selectedType === 'noun') {
+      switch (this.selectedLevel) {
+        case 'A1': this.allPairs = [...WORD_PAIRS_A1]; break;
+        case 'A2': this.allPairs = [...WORD_PAIRS_A2]; break;
+        case 'B1': this.allPairs = [...WORD_PAIRS_B1]; break;
+        case 'B2': this.allPairs = [...WORD_PAIRS_B2]; break;
+        case 'C1': this.allPairs = [...WORD_PAIRS_C1]; break;
+      }
+    } else if (this.selectedType === 'verb') {
+      switch (this.selectedLevel) {
+        case 'A1': this.allPairs = [...VERB_PAIRS_A1]; break;
+        case 'A2': this.allPairs = [...VERB_PAIRS_A2]; break;
+        case 'B1': this.allPairs = [...VERB_PAIRS_B1]; break;
+        case 'B2': this.allPairs = [...VERB_PAIRS_B2]; break;
+        case 'C1': this.allPairs = [...VERB_PAIRS_C1]; break;
+
+      }
+    }
+  }
+
+  pickNewWords() {
+    const shuffled = shuffle(this.allPairs.filter(w => !w.matched));
+    this.wordPairs = shuffled.slice(0, 7);
+    this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+    this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+    this.selectedGerman = null;
+    this.selectedTurkish = null;
+    this.selectedSide = null;
+    this.showCongrats = false;
+  }
+
+   onTypeChange() {
+    this.loadPairs();
+    this.allPairs.forEach(w => w.matched = false);
+    this.pickNewWords();
+  }
+
+   onLevelChange() {
+    this.loadPairs();
+    this.allPairs.forEach(w => w.matched = false); // Tüm kelimeleri sıfırla
+    this.pickNewWords();
+  }
 
   get matchedCount(): number {
   return this.wordPairs.filter(w => w.matched).length;
@@ -88,28 +124,35 @@ get progress(): number {
 }
 
 checkMatch() {
-  const pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
-  if (pair) {
-    pair.matched = true;
-    this.selectedGerman = null;
-    this.selectedTurkish = null;
-    this.selectedSide = null;
-    if (this.matchedCount === this.wordPairs.length) {
-      this.showCongrats = true;
-      this.launchConfetti();
-    }
-  } else {
-    // Yanlış eşleşme
-    this.wrongMatchGerman = this.selectedGerman;
-    this.wrongMatchTurkish = this.selectedTurkish;
-    setTimeout(() => {
-      this.wrongMatchGerman = null;
-      this.wrongMatchTurkish = null;
+    const pair = this.wordPairs.find(w => w.german === this.selectedGerman && w.turkish === this.selectedTurkish);
+    if (pair) {
+      pair.matched = true;
+      if (this.matchedCount === this.wordPairs.length) {
+        this.showCongrats = true;
+        this.launchConfetti();
+        setTimeout(() => {
+          this.pickNewWords();
+        }, 1500); // 1.5 saniye sonra yeni kelimeler gelsin
+      }
       this.selectedGerman = null;
       this.selectedTurkish = null;
       this.selectedSide = null;
-    }, 700); // 700ms kırmızı göster
+    } else {
+      this.wrongMatchGerman = this.selectedGerman;
+      this.wrongMatchTurkish = this.selectedTurkish;
+      setTimeout(() => {
+        this.wrongMatchGerman = null;
+        this.wrongMatchTurkish = null;
+        this.selectedGerman = null;
+        this.selectedTurkish = null;
+        this.selectedSide = null;
+      }, 700);
+    }
   }
+
+  getArtikel(german: string): string | undefined {
+  const pair = this.wordPairs.find(w => w.german === german);
+  return pair ? pair.artikel : '';
 }
 
    isMatchedGerman(word: string): boolean {

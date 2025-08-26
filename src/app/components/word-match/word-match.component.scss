@@ -29,6 +29,12 @@ li.matched {
 .list-group-item {
   border: 2px solid transparent;
   box-sizing: border-box;
+  min-height: 86px; 
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  word-break: break-word;
 }
 
 .list-group-item.matched {
@@ -39,6 +45,14 @@ li.matched {
   z-index: 1;
   animation: neon-spin-y 1s cubic-bezier(.05,2,1,1.0);
   transform-style: preserve-3d;
+}
+
+@media (max-width: 600px) {
+  .list-group-item {
+    min-height: 70px;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+  }
 }
 
 ul.list-group > li.list-group-item.bg-danger {
