@@ -49,6 +49,14 @@
           <span class="custom-arrow"></span>
         </div>
       </div>
+      <div class="d-flex justify-content-end mb-2" *ngIf="showWrongButton && !repeatWrongMode">
+  <button class="btn btn-warning btn-sm" (click)="repeatWrongWords()">
+    Yanlışları Tekrar Çalış
+  </button>
+  <button class="btn btn-outline-danger btn-sm ms-2" (click)="clearWrongWords()">
+    Temizle
+  </button>
+</div>
     </div>
     <div class="row">
       <div class="col">
@@ -57,16 +65,17 @@
         </h3>
         <ul class="list-group">
           <li *ngFor="let word of selectedLanguageMode === 'english-turkish' ? englishWords : germanWords"
-              class="list-group-item"
-              [class.matched]="selectedLanguageMode === 'english-turkish' ? isMatchedEnglish(word) : isMatchedGerman(word)"
-              [class.selected]="selectedLanguageMode === 'english-turkish' ? selectedEnglish === word : selectedGerman === word"
-              [class.bg-danger]="selectedLanguageMode === 'english-turkish' ? wrongMatchEnglish === word : wrongMatchGerman === word"
-              (click)="selectedLanguageMode === 'english-turkish' ? selectEnglish(word) : selectGerman(word)">
-            <span *ngIf="selectedLanguageMode !== 'english-turkish'" class="fw-bold me-1">
-              {{ getArtikel(word) }}
-            </span>
-            {{ word }}
-          </li>
+    class="list-group-item"
+    [class.matched]="selectedLanguageMode === 'english-turkish' ? isMatchedEnglish(word) : isMatchedGerman(word)"
+    [class.selected]="selectedLanguageMode === 'english-turkish' ? selectedEnglish === word : selectedGerman === word"
+    [class.bg-danger]="selectedLanguageMode === 'english-turkish' ? isWrongEnglish(word) : isWrongGerman(word)"
+    [class.disabled]="selectedLanguageMode === 'english-turkish' ? isWrongEnglish(word) : isWrongGerman(word)"
+    (click)="(selectedLanguageMode === 'english-turkish' ? !isWrongEnglish(word) : !isWrongGerman(word)) ? (selectedLanguageMode === 'english-turkish' ? selectEnglish(word) : selectGerman(word)) : null">
+  <span *ngIf="selectedLanguageMode !== 'english-turkish'" class="fw-bold me-1">
+    {{ getArtikel(word) }}
+  </span>
+  {{ word }}
+</li>
         </ul>
       </div>
       <div class="col">
@@ -75,13 +84,14 @@
         </h3>
         <ul class="list-group">
           <li *ngFor="let word of selectedLanguageMode === 'german-english' ? englishWords : turkishWords"
-              class="list-group-item"
-              [class.matched]="selectedLanguageMode === 'german-english' ? isMatchedEnglish(word) : isMatchedTurkish(word)"
-              [class.selected]="selectedLanguageMode === 'german-english' ? selectedEnglish === word : selectedTurkish === word"
-              [class.bg-danger]="selectedLanguageMode === 'german-english' ? wrongMatchEnglish === word : wrongMatchTurkish === word"
-              (click)="selectedLanguageMode === 'german-english' ? selectEnglish(word) : selectTurkish(word)">
-            {{ word }}
-          </li>
+    class="list-group-item"
+    [class.matched]="selectedLanguageMode === 'german-english' ? isMatchedEnglish(word) : isMatchedTurkish(word)"
+    [class.selected]="selectedLanguageMode === 'german-english' ? selectedEnglish === word : selectedTurkish === word"
+    [class.bg-danger]="selectedLanguageMode === 'german-english' ? isWrongEnglish(word) : isWrongTurkish(word)"
+    [class.disabled]="selectedLanguageMode === 'german-english' ? isWrongEnglish(word) : isWrongTurkish(word)"
+    (click)="(selectedLanguageMode === 'german-english' ? !isWrongEnglish(word) : !isWrongTurkish(word)) ? (selectedLanguageMode === 'german-english' ? selectEnglish(word) : selectTurkish(word)) : null">
+  {{ word }}
+</li>
         </ul>
       </div>
     </div>
