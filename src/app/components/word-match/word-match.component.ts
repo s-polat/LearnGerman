@@ -6,7 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { log } from 'node:console';
 
 
-
+interface WrongWordPair extends WordPair {
+  correctCount?: number;
+}
 
 function shuffle<T>(array: T[]): T[] {
   return array
@@ -43,12 +45,12 @@ export class WordMatchComponent {
   wrongMatchGerman: string | null = null;
   wrongMatchTurkish: string | null = null;
   wrongMatchEnglish: string | null = null;
-    selectedSide: 'german' | 'turkish' | 'english' | null = null;
+  selectedSide: 'german' | 'turkish' | 'english' | null = null;
   showCongrats: boolean = false;
   selectedGerman: string | null = null;
   selectedTurkish: string | null = null;
   selectedEnglish: string | null = null;
-   wrongWords: WordPair[] = [];
+  wrongWords: WrongWordPair[] = [];
   repeatWrongMode: boolean = false;
   showWrongButton: boolean = false;
 
@@ -83,26 +85,34 @@ export class WordMatchComponent {
     }
   }
 
+  returnToNormalWords() {
+  this.repeatWrongMode = false;
+  this.pickNewWords();
+}
+
   // Yanlışları tekrar çalıştır
-  repeatWrongWords() {
-    this.repeatWrongMode = true;
-    this.wordPairs = shuffle(this.wrongWords.map(w => ({ ...w, matched: false }))).slice(0, 7);
-    if (this.selectedLanguageMode === 'german-turkish') {
-      this.germanWords = shuffle(this.wordPairs.map(w => w.german));
-      this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
-    } else if (this.selectedLanguageMode === 'german-english') {
-      this.germanWords = shuffle(this.wordPairs.map(w => w.german));
-      this.englishWords = shuffle(this.wordPairs.map(w => w.english));
-    } else if (this.selectedLanguageMode === 'english-turkish') {
-      this.englishWords = shuffle(this.wordPairs.map(w => w.english));
-      this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
-    }
-    this.selectedGerman = null;
-    this.selectedTurkish = null;
-    this.selectedEnglish = null;
-    this.selectedSide = null;
-    this.showCongrats = false;
+repeatWrongWords() {
+  this.repeatWrongMode = true;
+  // wrongWords listesinden rastgele 7 kelime seç, wrong özelliğini sıfırla!
+ const shuffled = shuffle(this.wrongWords);
+ this.wordPairs = shuffled.slice(0, 7).map(w => ({ ...w, wrong: false, matched: false, correctCount: w.correctCount || 0 }));
+
+  if (this.selectedLanguageMode === 'german-turkish') {
+    this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+    this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+  } else if (this.selectedLanguageMode === 'german-english') {
+    this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+    this.englishWords = shuffle(this.wordPairs.map(w => w.english));
+  } else if (this.selectedLanguageMode === 'english-turkish') {
+    this.englishWords = shuffle(this.wordPairs.map(w => w.english));
+    this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
   }
+  this.selectedGerman = null;
+  this.selectedTurkish = null;
+  this.selectedEnglish = null;
+  this.selectedSide = null;
+  this.showCongrats = false;
+}
 
   // Yanlışları temizle
   clearWrongWords() {
@@ -151,13 +161,34 @@ export class WordMatchComponent {
 }
 
 pickNewWords() {
-  // Kalan eşleşmemiş ve yanlış işaretlenmemiş kelimeleri seç
+  if (this.repeatWrongMode) {
+    // Sadece yanlış kelimelerden yeni grup getir
+    const shuffled = shuffle(this.wrongWords);
+    this.wordPairs = shuffled.slice(0, 7).map(w => ({ ...w, wrong: false, matched: false, correctCount: w.correctCount || 0 }));
+
+    if (this.selectedLanguageMode === 'german-turkish') {
+      this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+      this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+    } else if (this.selectedLanguageMode === 'german-english') {
+      this.germanWords = shuffle(this.wordPairs.map(w => w.german));
+      this.englishWords = shuffle(this.wordPairs.map(w => w.english));
+    } else if (this.selectedLanguageMode === 'english-turkish') {
+      this.englishWords = shuffle(this.wordPairs.map(w => w.english));
+      this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
+    }
+    this.selectedGerman = null;
+    this.selectedTurkish = null;
+    this.selectedEnglish = null;
+    this.selectedSide = null;
+    this.showCongrats = false;
+    return;
+  }
+
+  // Normal modda eski mantık devam etsin
   const shuffled = shuffle(this.allPairs.filter(w => !w.matched && !(w as any).wrong));
   this.wordPairs = shuffled.slice(0, 7);
 
-  // Eğer ekranda hiç kelime yoksa, tüm kelimeler bitmiştir!
   if (this.wordPairs.length === 0) {
-    // Hepsi doğru eşleştiyse konfeti ve tebrik mesajı göster
     const allCorrect = this.allPairs.length > 0 && this.allPairs.every(w => w.matched);
     if (allCorrect) {
       this.showCongrats = true;
@@ -168,7 +199,6 @@ pickNewWords() {
     return;
   }
 
-  // Ekranda gösterilecek kelimeleri güncelle
   if (this.selectedLanguageMode === 'german-turkish') {
     this.germanWords = shuffle(this.wordPairs.map(w => w.german));
     this.turkishWords = shuffle(this.wordPairs.map(w => w.turkish));
@@ -184,6 +214,7 @@ pickNewWords() {
   this.selectedTurkish = null;
   this.selectedEnglish = null;
   this.selectedSide = null;
+  this.showCongrats = false;
 }
 
     onLanguageModeChange() {
@@ -287,10 +318,25 @@ checkMatch() {
     pair = this.wordPairs.find(w => w.english === this.selectedEnglish && w.turkish === this.selectedTurkish);
   }
 
-  if (pair) {
+ if (pair) {
     pair.matched = true;
-    this.removeWrongWordFromLS(pair);
-    this.loadWrongWordsFromLS();
+    if (this.repeatWrongMode) {
+      // repeatWrongMode'da doğru bilinen kelimenin sayaç değerini artır
+      let wrongs: any[] = JSON.parse(localStorage.getItem('wrongWords') || '[]');
+      const idx = wrongs.findIndex(w => w.german === pair.german && w.turkish === pair.turkish && w.english === pair.english);
+      if (idx !== -1) {
+        wrongs[idx].correctCount = (wrongs[idx].correctCount || 0) + 1;
+        // Sayaç 4 olduysa arrayden sil
+        if (wrongs[idx].correctCount >= 4) {
+          wrongs.splice(idx, 1);
+        }
+        localStorage.setItem('wrongWords', JSON.stringify(wrongs));
+        this.loadWrongWordsFromLS();
+      }
+    } else {
+      this.removeWrongWordFromLS(pair);
+      this.loadWrongWordsFromLS();
+    }
   } else {
     let wrongPair: WordPair | undefined;
     if (this.selectedLanguageMode === 'german-turkish') {

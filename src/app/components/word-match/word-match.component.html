@@ -1,62 +1,57 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
   <div class="bg-white p-4 rounded shadow" style="max-width: 600px; width: 100%;">
-    <div class="mb-4 d-flex flex-column flex-md-row justify-content-center align-items-center gap-3 w-100">
-      <div class="w-100">
-        <label for="langModeSelect" class="form-label me-2 mb-0 fw-bold">
+     <div class="row g-2 mb-2">
+      <div class="col-12">
+        <label for="langModeSelect" class="form-label fw-bold">
           {{ selectedLanguageMode === 'english-turkish' ? 'Language Mode:' : 'Sprachmodus:' }}
         </label>
-        <div class="custom-select-wrapper w-100">
-          <select id="langModeSelect" class="form-select custom-select" [(ngModel)]="selectedLanguageMode" (change)="onLanguageModeChange()">
-            <option value="german-turkish">
-              {{ selectedLanguageMode === 'english-turkish' ? 'German - Turkish' : 'Deutsch - Türkisch' }}
-            </option>
-            <option value="german-english">
-              {{ selectedLanguageMode === 'english-turkish' ? 'German - English' : 'Deutsch - Englisch' }}
-            </option>
-            <option value="english-turkish">
-              English - Turkish
-            </option>
-          </select>
-          <span class="custom-arrow"></span>
-        </div>
+        <select id="langModeSelect" class="form-select custom-select mb-2" [(ngModel)]="selectedLanguageMode" (change)="onLanguageModeChange()">
+          <option value="german-turkish">
+            {{ selectedLanguageMode === 'english-turkish' ? 'German - Turkish' : 'Deutsch - Türkisch' }}
+          </option>
+          <option value="german-english">
+            {{ selectedLanguageMode === 'english-turkish' ? 'German - English' : 'Deutsch - Englisch' }}
+          </option>
+          <option value="english-turkish">
+            English - Turkish
+          </option>
+        </select>
       </div>
-      <div class="w-100">
-        <label for="levelSelect" class="form-label me-2 mb-0 fw-bold">
+      <div class="col-12">
+        <label for="levelSelect" class="form-label fw-bold">
           {{ selectedLanguageMode === 'english-turkish' ? 'Level:' : 'Niveau:' }}
         </label>
-        <div class="custom-select-wrapper w-100">
-          <select id="levelSelect" class="form-select custom-select" [(ngModel)]="selectedLevel" (change)="onLevelChange()">
-            <option value="A1">A1</option>
-            <option value="A2">A2</option>
-            <option value="B1">B1</option>
-            <option value="B2">B2</option>
-            <option value="C1">C1</option>
-          </select>
-          <span class="custom-arrow"></span>
-        </div>
+        <select id="levelSelect" class="form-select custom-select mb-2" [(ngModel)]="selectedLevel" (change)="onLevelChange()">
+          <option value="A1">A1</option>
+          <option value="A2">A2</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="C1">C1</option>
+        </select>
       </div>
-      <div class="w-100">
-        <label for="typeSelect" class="form-label me-2 mb-0 fw-bold">
+      <div class="col-12">
+        <label for="typeSelect" class="form-label fw-bold">
           {{ selectedLanguageMode === 'english-turkish' ? 'Type:' : 'Typ:' }}
         </label>
-        <div class="custom-select-wrapper w-100">
-          <select id="typeSelect" class="form-select custom-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
-            <option value="noun">{{ selectedLanguageMode === 'english-turkish' ? 'Noun' : 'Nomen' }}</option>
-            <option value="verb">{{ selectedLanguageMode === 'english-turkish' ? 'Verb' : 'Verb' }}</option>
-            <option value="adjective">{{ selectedLanguageMode === 'english-turkish' ? 'Adjective' : 'Adjektiv' }}</option>
-            <option value="adverb">{{ selectedLanguageMode === 'english-turkish' ? 'Adverb' : 'Adverb' }}</option>
-          </select>
-          <span class="custom-arrow"></span>
+        <select id="typeSelect" class="form-select custom-select mb-2" [(ngModel)]="selectedType" (change)="onTypeChange()">
+          <option value="noun">{{ selectedLanguageMode === 'english-turkish' ? 'Noun' : 'Nomen' }}</option>
+          <option value="verb">{{ selectedLanguageMode === 'english-turkish' ? 'Verb' : 'Verb' }}</option>
+          <option value="adjective">{{ selectedLanguageMode === 'english-turkish' ? 'Adjective' : 'Adjektiv' }}</option>
+          <option value="adverb">{{ selectedLanguageMode === 'english-turkish' ? 'Adverb' : 'Adverb' }}</option>
+        </select>
+      </div>
+    </div>
+    <!-- Butonlar için ayrı satır -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div *ngIf="showWrongButton && !repeatWrongMode" class="d-flex flex-wrap gap-2 justify-content-end">
+          <button class="btn btn-warning btn-sm" (click)="repeatWrongWords()">Yanlışları Tekrar Çalış</button>
+          <button class="btn btn-outline-danger btn-sm" (click)="clearWrongWords()">Temizle</button>
+        </div>
+        <div *ngIf="repeatWrongMode" class="d-flex justify-content-end">
+          <button class="btn btn-primary btn-sm" (click)="returnToNormalWords()">Normal Kelimelere Dön</button>
         </div>
       </div>
-      <div class="d-flex justify-content-end mb-2" *ngIf="showWrongButton && !repeatWrongMode">
-  <button class="btn btn-warning btn-sm" (click)="repeatWrongWords()">
-    Yanlışları Tekrar Çalış
-  </button>
-  <button class="btn btn-outline-danger btn-sm ms-2" (click)="clearWrongWords()">
-    Temizle
-  </button>
-</div>
     </div>
     <div class="row">
       <div class="col">
