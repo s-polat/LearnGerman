@@ -1,11 +1,15 @@
-<div class="d-flex justify-content-center align-items-center vh-100">
-  <div class="bg-white p-4 rounded shadow" style="max-width: 600px; width: 100%;">
-     <div class="row g-2 mb-2">
-      <div class="col-12">
-        <label for="langModeSelect" class="form-label fw-bold">
+<!-- Selectler ve butonlar üstte, kelime eşleştirme kutusu aşağıda bağımsız şekilde -->
+ <div class="vh-100 d-flex flex-column justify-content-start align-items-center bg-light">
+ 
+<div class="w-100" style="max-width: 600px;">
+  <div class="bg-white pt-2 px-3 rounded shadow">
+    <div class="row g-1">
+      <div class="col-12 mt-0">
+        <label for="langModeSelect" class="form-label fw-bold mb-0">
           {{ selectedLanguageMode === 'english-turkish' ? 'Language Mode:' : 'Sprachmodus:' }}
         </label>
-        <select id="langModeSelect" class="form-select custom-select mb-2" [(ngModel)]="selectedLanguageMode" (change)="onLanguageModeChange()">
+        <select id="langModeSelect" class="form-select custom-select" [(ngModel)]="selectedLanguageMode"
+          (change)="onLanguageModeChange()">
           <option value="german-turkish">
             {{ selectedLanguageMode === 'english-turkish' ? 'German - Turkish' : 'Deutsch - Türkisch' }}
           </option>
@@ -17,11 +21,12 @@
           </option>
         </select>
       </div>
-      <div class="col-12">
-        <label for="levelSelect" class="form-label fw-bold">
+      <div class="col-12 mt-0">
+        <label for="levelSelect" class="form-label fw-bold mb-0">
           {{ selectedLanguageMode === 'english-turkish' ? 'Level:' : 'Niveau:' }}
         </label>
-        <select id="levelSelect" class="form-select custom-select mb-2" [(ngModel)]="selectedLevel" (change)="onLevelChange()">
+        <select id="levelSelect" class="form-select custom-select" [(ngModel)]="selectedLevel"
+          (change)="onLevelChange()">
           <option value="A1">A1</option>
           <option value="A2">A2</option>
           <option value="B1">B1</option>
@@ -29,21 +34,19 @@
           <option value="C1">C1</option>
         </select>
       </div>
-      <div class="col-12">
-        <label for="typeSelect" class="form-label fw-bold">
+      <div class="col-12 ">
+        <label for="typeSelect" class="form-label fw-bold mb-0">
           {{ selectedLanguageMode === 'english-turkish' ? 'Type:' : 'Typ:' }}
         </label>
-        <select id="typeSelect" class="form-select custom-select mb-2" [(ngModel)]="selectedType" (change)="onTypeChange()">
+        <select id="typeSelect" class="form-select custom-select" [(ngModel)]="selectedType"
+          (change)="onTypeChange()">
           <option value="noun">{{ selectedLanguageMode === 'english-turkish' ? 'Noun' : 'Nomen' }}</option>
           <option value="verb">{{ selectedLanguageMode === 'english-turkish' ? 'Verb' : 'Verb' }}</option>
           <option value="adjective">{{ selectedLanguageMode === 'english-turkish' ? 'Adjective' : 'Adjektiv' }}</option>
           <option value="adverb">{{ selectedLanguageMode === 'english-turkish' ? 'Adverb' : 'Adverb' }}</option>
         </select>
       </div>
-    </div>
-    <!-- Butonlar için ayrı satır -->
-    <div class="row mb-3">
-      <div class="col-12">
+      <div class="col-12 mt-0 mb-2">
         <div *ngIf="showWrongButton && !repeatWrongMode" class="d-flex flex-wrap gap-2 justify-content-end">
           <button class="btn btn-warning btn-sm" (click)="repeatWrongWords()">Yanlışları Tekrar Çalış</button>
           <button class="btn btn-outline-danger btn-sm" (click)="clearWrongWords()">Temizle</button>
@@ -53,6 +56,12 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Kelime eşleştirme kutusu aşağıda, bağımsız şekilde -->
+<div class="flex-grow-1 d-flex justify-content-center align-items-center w-100">
+  <div class="bg-white pt-1 pb-4 px-3 rounded shadow" style="max-width: 600px; width: 100%;">
     <div class="row">
       <div class="col">
         <h3 class="text-center">
@@ -60,17 +69,17 @@
         </h3>
         <ul class="list-group">
           <li *ngFor="let word of selectedLanguageMode === 'english-turkish' ? englishWords : germanWords"
-    class="list-group-item"
-    [class.matched]="selectedLanguageMode === 'english-turkish' ? isMatchedEnglish(word) : isMatchedGerman(word)"
-    [class.selected]="selectedLanguageMode === 'english-turkish' ? selectedEnglish === word : selectedGerman === word"
-    [class.bg-danger]="selectedLanguageMode === 'english-turkish' ? isWrongEnglish(word) : isWrongGerman(word)"
-    [class.disabled]="selectedLanguageMode === 'english-turkish' ? isWrongEnglish(word) : isWrongGerman(word)"
-    (click)="(selectedLanguageMode === 'english-turkish' ? !isWrongEnglish(word) : !isWrongGerman(word)) ? (selectedLanguageMode === 'english-turkish' ? selectEnglish(word) : selectGerman(word)) : null">
-  <span *ngIf="selectedLanguageMode !== 'english-turkish'" class="fw-bold me-1">
-    {{ getArtikel(word) }}
-  </span>
-  {{ word }}
-</li>
+            class="list-group-item"
+            [class.matched]="selectedLanguageMode === 'english-turkish' ? isMatchedEnglish(word) : isMatchedGerman(word)"
+            [class.selected]="selectedLanguageMode === 'english-turkish' ? selectedEnglish === word : selectedGerman === word"
+            [class.bg-danger]="selectedLanguageMode === 'english-turkish' ? isWrongEnglish(word) : isWrongGerman(word)"
+            [class.disabled]="selectedLanguageMode === 'english-turkish' ? isWrongEnglish(word) : isWrongGerman(word)"
+            (click)="(selectedLanguageMode === 'english-turkish' ? !isWrongEnglish(word) : !isWrongGerman(word)) ? (selectedLanguageMode === 'english-turkish' ? selectEnglish(word) : selectGerman(word)) : null">
+            <span *ngIf="selectedLanguageMode !== 'english-turkish'" class="fw-bold me-1">
+              {{ getArtikel(word) }}
+            </span>
+            {{ word }}
+          </li>
         </ul>
       </div>
       <div class="col">
@@ -79,14 +88,14 @@
         </h3>
         <ul class="list-group">
           <li *ngFor="let word of selectedLanguageMode === 'german-english' ? englishWords : turkishWords"
-    class="list-group-item"
-    [class.matched]="selectedLanguageMode === 'german-english' ? isMatchedEnglish(word) : isMatchedTurkish(word)"
-    [class.selected]="selectedLanguageMode === 'german-english' ? selectedEnglish === word : selectedTurkish === word"
-    [class.bg-danger]="selectedLanguageMode === 'german-english' ? isWrongEnglish(word) : isWrongTurkish(word)"
-    [class.disabled]="selectedLanguageMode === 'german-english' ? isWrongEnglish(word) : isWrongTurkish(word)"
-    (click)="(selectedLanguageMode === 'german-english' ? !isWrongEnglish(word) : !isWrongTurkish(word)) ? (selectedLanguageMode === 'german-english' ? selectEnglish(word) : selectTurkish(word)) : null">
-  {{ word }}
-</li>
+            class="list-group-item"
+            [class.matched]="selectedLanguageMode === 'german-english' ? isMatchedEnglish(word) : isMatchedTurkish(word)"
+            [class.selected]="selectedLanguageMode === 'german-english' ? selectedEnglish === word : selectedTurkish === word"
+            [class.bg-danger]="selectedLanguageMode === 'german-english' ? isWrongEnglish(word) : isWrongTurkish(word)"
+            [class.disabled]="selectedLanguageMode === 'german-english' ? isWrongEnglish(word) : isWrongTurkish(word)"
+            (click)="(selectedLanguageMode === 'german-english' ? !isWrongEnglish(word) : !isWrongTurkish(word)) ? (selectedLanguageMode === 'german-english' ? selectEnglish(word) : selectTurkish(word)) : null">
+            {{ word }}
+          </li>
         </ul>
       </div>
     </div>
@@ -101,13 +110,14 @@
     </div>
     <!-- Tebrik Mesajı -->
     <div *ngIf="showCongrats" class="m-auto text-center mt-4">
-  <h4 class="text-success">
-    {{
-      selectedLanguageMode === 'english-turkish'
+      <h4 class="text-success">
+        {{
+        selectedLanguageMode === 'english-turkish'
         ? 'Congratulations! All matched correctly 🎉'
         :'Glückwunsch! Alles richtig zugeordnet 🎉'
-    }}
-  </h4>
-</div>
+        }}
+      </h4>
+    </div>
   </div>
+</div>
 </div>

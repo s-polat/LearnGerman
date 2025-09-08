@@ -1,4 +1,15 @@
 /* filepath: src/app/word-match/word-match.component.scss */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Scroll'u engeller */
+}
+body {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
 .columns {
   display: flex;
   gap: 40px;
