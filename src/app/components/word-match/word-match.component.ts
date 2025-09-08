@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import confetti from 'canvas-confetti';
 import { ADJEKTIV_PAIRS_A1, ADJEKTIV_PAIRS_A2, ADJEKTIV_PAIRS_B1, ADJEKTIV_PAIRS_B2, ADJEKTIV_PAIRS_C1, ADVERB_PAIRS_A1, ADVERB_PAIRS_A2, ADVERB_PAIRS_B1, ADVERB_PAIRS_B2, ADVERB_PAIRS_C1, VERB_PAIRS_A1, VERB_PAIRS_A2, VERB_PAIRS_B1, VERB_PAIRS_B2, VERB_PAIRS_C1, WORD_PAIRS_A1, WORD_PAIRS_A2, WORD_PAIRS_B1, WORD_PAIRS_B2, WORD_PAIRS_C1, WordPair } from '../../data/word-pairs';
 import { FormsModule } from '@angular/forms';
-import { log } from 'node:console';
 
 
 interface WrongWordPair extends WordPair {
@@ -54,7 +53,7 @@ export class WordMatchComponent {
   repeatWrongMode: boolean = false;
   showWrongButton: boolean = false;
 
-   // Yanlış kelimeyi kaydet
+   // Save wrong word
   saveWrongWordToLS(pair: WordPair) {
     if (typeof window !== 'undefined' && window.localStorage) {
       let wrongs: WordPair[] = JSON.parse(localStorage.getItem('wrongWords') || '[]');
@@ -65,7 +64,7 @@ export class WordMatchComponent {
     }
   }
 
-  // Yanlış kelimeyi sil
+  // Remove wrong word
   removeWrongWordFromLS(pair: WordPair) {
     if (typeof window !== 'undefined' && window.localStorage) {
       let wrongs: WordPair[] = JSON.parse(localStorage.getItem('wrongWords') || '[]');
@@ -74,7 +73,7 @@ export class WordMatchComponent {
     }
   }
 
-  // Yanlış kelimeleri yükle
+  // Load wrong words
   loadWrongWordsFromLS() {
     if (typeof window !== 'undefined' && window.localStorage) {
       this.wrongWords = JSON.parse(localStorage.getItem('wrongWords') || '[]');
@@ -90,10 +89,10 @@ export class WordMatchComponent {
   this.pickNewWords();
 }
 
-  // Yanlışları tekrar çalıştır
+  // repeat wrong words
 repeatWrongWords() {
   this.repeatWrongMode = true;
-  // wrongWords listesinden rastgele 7 kelime seç, wrong özelliğini sıfırla!
+  // select first 7 wrong words
  const shuffled = shuffle(this.wrongWords);
  this.wordPairs = shuffled.slice(0, 7).map(w => ({ ...w, wrong: false, matched: false, correctCount: w.correctCount || 0 }));
 
@@ -114,7 +113,7 @@ repeatWrongWords() {
   this.showCongrats = false;
 }
 
-  // Yanlışları temizle
+  // delete all wrong words
   clearWrongWords() {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.removeItem('wrongWords');
@@ -353,18 +352,17 @@ checkMatch() {
     }
   }
 
-  // Seçimleri sıfırla
   this.selectedGerman = null;
   this.selectedTurkish = null;
   this.selectedEnglish = null;
   this.selectedSide = null;
 
-  // Ekrandaki tüm kelimeler matched veya wrong ise yeni kelimelere geç
+  // If all words on the screen are matched or wrong, move on to new words
   const allScreenDone = this.wordPairs.every(w => w.matched || (w as any).wrong);
   if (allScreenDone) {
     setTimeout(() => {
       this.pickNewWords();
-    }, 1000); // Geçişi biraz yavaşlatmak için 1 saniye beklet
+    }, 1000); // Delay the transition by 1 second
   }
 }
 
