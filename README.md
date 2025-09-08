@@ -1,59 +1,64 @@
-# TempApp
+# LearnGerman Word Match App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+This is an interactive word matching application for learning German vocabulary. Users can match German words with their Turkish or English equivalents, practice their mistakes, and track their progress.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Language Modes:** Match German-Turkish, German-English, or English-Turkish word pairs.
+- **Levels & Types:** Select word level (A1–C1) and type (noun, verb, adjective, adverb).
+- **Progress Tracking:** See your matching progress with a progress bar.
+- **Mistake Practice:** Review and practice words you matched incorrectly.
+- **Smart Mistake Handling:** Mistake words stay in the practice list until you match them correctly 4 times.
+- **Responsive Design:** Works smoothly on mobile, tablet, and desktop.
+- **Confetti Celebration:** Get a congratulatory message and confetti when all words are matched correctly.
 
-```bash
-ng serve
-```
+## Getting Started
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd LearnGerman
+   ```
 
-## Code scaffolding
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+3. **Run the app:**
+   ```bash
+   ng serve
+   ```
+   or for Vite/React:
+   ```bash
+   npm start
+   ```
 
-```bash
-ng generate component component-name
-```
+## Usage
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Select your desired **language mode**, **level**, and **word type** from the dropdowns.
+- Click on words to match them.
+- If you make a mistake, use the **Review Mistakes** button to practice only your incorrect words.
+- Use **Reset Mistakes** to clear your mistake list.
+- Return to all words with **Back to All Words**.
 
-```bash
-ng generate --help
-```
+## Technologies
 
-## Building
+- Angular
+- TypeScript
+- Bootstrap (for responsive UI)
+- LocalStorage (for mistake tracking)
+- canvas-confetti (for celebration effect)
 
-To build the project run:
+## Customization
 
-```bash
-ng build
-```
+- Add or edit word pairs in `/src/app/data/word-pairs.ts`.
+- Change UI styles in `/src/app/components/word-match/word-match.component.scss`.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## License
 
-## Running unit tests
+MIT
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+---
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Enjoy learning German! Viel Erfolg beim Deutschlernen!**
