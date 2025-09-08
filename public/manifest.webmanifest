@@ -1,0 +1,14 @@
+{
+  "name": "temp-app",
+  "short_name": "temp-app",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+  { "src": "/public/icons/myicon_64x64.png", "sizes": "64x64", "type": "image/png" },
+  { "src": "/public/icons/myicon_128x128.png", "sizes": "128x128", "type": "image/png" },
+  { "src": "/public/icons/myicon_192x192.png", "sizes": "192x192", "type": "image/png" },
+  { "src": "/public/icons/myicon_256x256.png", "sizes": "256x256", "type": "image/png" },
+  { "src": "/public/icons/myicon_512x512.png", "sizes": "512x512", "type": "image/png" }
+]
+}
