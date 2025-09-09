@@ -11,6 +11,12 @@ This is an interactive word matching application for learning German vocabulary.
 - **Smart Mistake Handling:** Mistake words stay in the practice list until you match them correctly 4 times.
 - **Responsive Design:** Works smoothly on mobile, tablet, and desktop.
 - **Confetti Celebration:** Get a congratulatory message and confetti when all words are matched correctly.
+- **Progressive Web App (PWA):** Installable and usable like a native app on mobile and desktop devices.
+
+## What is a PWA?
+
+A **Progressive Web App (PWA)** is a web application that offers an app-like experience on mobile and desktop. PWAs can be installed to your device's home screen, work offline, load fast, and provide native-like interactions such as push notifications and full-screen mode. This app is a PWA, so you can install it and use it just like a regular mobile or desktop application.
+
 
 ## Getting Started
 
@@ -29,11 +35,7 @@ This is an interactive word matching application for learning German vocabulary.
    ```bash
    ng serve
    ```
-   or for Vite/React:
-   ```bash
-   npm start
-   ```
-
+   
 ## Usage
 
 - Select your desired **language mode**, **level**, and **word type** from the dropdowns.
@@ -41,6 +43,7 @@ This is an interactive word matching application for learning German vocabulary.
 - If you make a mistake, use the **Review Mistakes** button to practice only your incorrect words.
 - Use **Reset Mistakes** to clear your mistake list.
 - Return to all words with **Back to All Words**.
+- On mobile or desktop, you can install the app for a native experience.
 
 ## Technologies
 
@@ -49,6 +52,7 @@ This is an interactive word matching application for learning German vocabulary.
 - Bootstrap (for responsive UI)
 - LocalStorage (for mistake tracking)
 - canvas-confetti (for celebration effect)
+- PWA (Progressive Web App) support
 
 ## Customization
 
