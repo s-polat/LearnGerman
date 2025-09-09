@@ -9,6 +9,11 @@ interface WrongWordPair extends WordPair {
   correctCount?: number;
 }
 
+interface ExtendedWordPair extends WordPair {
+  wrong?: boolean;
+  correctCount?: number;
+}
+
 function shuffle<T>(array: T[]): T[] {
   return array
     .map(value => ({ value, sort: Math.random() }))
@@ -161,9 +166,19 @@ repeatWrongWords() {
 
 pickNewWords() {
   if (this.repeatWrongMode) {
-    // Sadece yanlış kelimelerden yeni grup getir
+    // Sadece yanlış kelimelerden yeni grup getir, benzersiz olacak şekilde
     const shuffled = shuffle(this.wrongWords);
-    this.wordPairs = shuffled.slice(0, 7).map(w => ({ ...w, wrong: false, matched: false, correctCount: w.correctCount || 0 }));
+    const uniquePairs: ExtendedWordPair[] = [];
+    const seen = new Set();
+    for (const w of shuffled) {
+      const key = `${w.german}|${w.turkish}|${w.english}`;
+      if (!seen.has(key)) {
+        uniquePairs.push({ ...w, wrong: false, matched: false, correctCount: w.correctCount || 0 });
+        seen.add(key);
+      }
+      if (uniquePairs.length === 7) break;
+    }
+    this.wordPairs = uniquePairs;
 
     if (this.selectedLanguageMode === 'german-turkish') {
       this.germanWords = shuffle(this.wordPairs.map(w => w.german));
@@ -183,9 +198,19 @@ pickNewWords() {
     return;
   }
 
-  // Normal modda eski mantık devam etsin
+  // Normal modda benzersiz kelime çiftleri seç
   const shuffled = shuffle(this.allPairs.filter(w => !w.matched && !(w as any).wrong));
-  this.wordPairs = shuffled.slice(0, 7);
+  const uniquePairs: ExtendedWordPair[] = [];
+  const seen = new Set();
+  for (const w of shuffled) {
+    const key = `${w.german}|${w.turkish}|${w.english}`;
+    if (!seen.has(key)) {
+      uniquePairs.push(w);
+      seen.add(key);
+    }
+    if (uniquePairs.length === 7) break;
+  }
+  this.wordPairs = uniquePairs;
 
   if (this.wordPairs.length === 0) {
     const allCorrect = this.allPairs.length > 0 && this.allPairs.every(w => w.matched);
